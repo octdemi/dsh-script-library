@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+.npm-cache/
+npm-cache-local/
+
+# Build output (hand-written, no build step; lib/ is source-of-truth)
+dist/
+out/
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Local harness state (never commit)
+.dsh/
