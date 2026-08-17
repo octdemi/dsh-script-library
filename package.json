@@ -32,7 +32,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-name/dsh-script-library.git"
+    "url": "https://github.com/octdemi/dsh-script-library.git"
   },
   "dsh": {
     "client": {
