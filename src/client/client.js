@@ -139,7 +139,7 @@ window.__ModuleLoader__.load({
             const info = document.createElement("div");
             info.style.cssText = "flex:1;min-width:0;";
             const name = document.createElement("div");
-            name.style.cssText = "font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;";
+            name.style.cssText = "font-weight:600;font-size:13px;line-height:1.5;word-break:break-all;white-space:normal;";
             name.textContent = "[" + (e.type || "待定") + "] " + (e.name || e.id || "");
             name.title = e.summary || "";
             const sum = document.createElement("div");
