@@ -222,9 +222,16 @@ export class ScriptLibraryPlugin extends TypertRemoteService {
     const d = event.data;
     if (d.name !== "run_code") return;
     const key = `${session?.id ?? "?"}:${d.callId}`;
+    let parsed;
+    try {
+      parsed = typeof d.arguments === "string" ? JSON.parse(d.arguments) : d.arguments;
+    } catch {
+      parsed = { description: String(d.arguments ?? "") };
+    }
     this.pendingCalls.set(key, {
       name: d.name,
-      args: typeof d.arguments === "string" ? d.arguments : JSON.stringify(d.arguments),
+      args: parsed,
+      description: parsed?.description ?? "",
       startedAt: event.time ?? Date.now(),
     });
     if (this.pendingCalls.size > 500) {
@@ -256,13 +263,17 @@ export class ScriptLibraryPlugin extends TypertRemoteService {
     const content = extractText(message.content);
     if (content.length < 60) return; // trivial — not a candidate
 
-    const slug = call ? toKebab(call.args.slice(0, 80)) : "run";
-    const id = slug || `run-${Date.now().toString(36)}`;
+    // Human-readable identity: prefer the run_code `description` argument
+    // ("实际干了什么"), fall back to a kebab of the code/args.
+    const description = (call?.description || "").trim();
+    const label = description.slice(0, 60) || (call ? toKebab(JSON.stringify(call.args).slice(0, 80)) : "run");
+    const base = toKebab(description.slice(0, 40));
+    const id = `${base || "run"}-${Date.now().toString(36).slice(-4)}`;
     const entry = {
       id,
       type: "待定",
-      name: id,
-      summary: `${content.length >= 600 ? "多步" : "简短"} run_code 候选（输出约 ${content.length} 字符），待人工确认分类`,
+      name: label,
+      summary: description || `${content.length >= 600 ? "多步" : "简短"} run_code 候选（输出约 ${content.length} 字符），待人工确认分类`,
       source: `run_code@${session?.id ?? "?"}`,
       location: `entries/${id}/`,
       createdAt: "",

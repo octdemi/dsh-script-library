@@ -144,7 +144,7 @@ window.__ModuleLoader__.load({
             name.title = e.summary || "";
             const sum = document.createElement("div");
             sum.style.cssText = "font-size:12px;color:#999;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;";
-            sum.textContent = (e.summary || "") + " · " + (e.source || "");
+            sum.textContent = [e.summary, e.source].filter(Boolean).join(" · ");
             info.appendChild(name);
             info.appendChild(sum);
             const appr = document.createElement("button");
